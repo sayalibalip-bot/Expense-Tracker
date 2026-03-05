@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Expense Tracker</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💰 Expense Tracker</h1>
+
+<form id="expenseForm">
+
+<input type="text" id="title" placeholder="Expense Title" required>
+
+<input type="number" id="amount" placeholder="Amount" required>
+
+<select id="category">
+
+<option>Food</option>
+<option>Travel</option>
+<option>Shopping</option>
+<option>Education</option>
+
+</select>
+
+<button type="submit">Add Expense</button>
+
+</form>
+
+<button id="darkBtn">🌙 Dark Mode</button>
+
+<h2>Total: ₹ <span id="total">0</span></h2>
+
+<ul id="expenseList"></ul>
+
+<div class="charts">
+
+<canvas id="pieChart"></canvas>
+
+<canvas id="barChart"></canvas>
+
+</div>
+
+</div>
+
+<script src="indexScript.js"></script>
+
+</body>
+</html>
