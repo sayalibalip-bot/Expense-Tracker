@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Expense Dashboard</title>
+
+<link rel="stylesheet" href="/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<h1>Expense Tracker Dashboard</h1>
+
+<form id="expenseForm">
+
+<input type="text" name="title" placeholder="Title" required>
+
+<input type="number" name="amount" placeholder="Amount" required>
+
+<input type="text" name="category" placeholder="Category">
+
+<input type="date" name="date">
+
+<input type="file" name="bill">
+
+<button type="submit">Add Expense</button>
+
+</form>
+
+<h2>Expense History</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Title</th>
+<th>Amount</th>
+<th>Category</th>
+<th>Date</th>
+<th>Bill</th>
+<th>Delete</th>
+</tr>
+</thead>
+
+<tbody id="expenseTable"></tbody>
+
+</table>
+
+<h2>Expense Chart</h2>
+
+<canvas id="myChart"></canvas>
+
+<script src="/script.js"></script>
+
+</body>
+</html>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
-<title>Expense Tracker</title>
+<title>Smart Expense Dashboard</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -14,38 +15,113 @@
 
 <div class="container">
 
-<h1>💰 Expense Tracker</h1>
+<div class="sidebar">
 
-<form id="expenseForm">
+<h3>Expense App</h3>
 
-<input type="text" id="title" placeholder="Expense Title" required>
+<ul>
 
-<input type="number" id="amount" placeholder="Amount" required>
+<li onclick="showDashboard()">Dashboard</li>
+<li onclick="showAdd()">Add Expense</li>
+<li onclick="showHistory()">History</li>
+<li onclick="showCharts()">Graphs</li>
+<li onclick="showVision()">Live Vision</li>
+<li onclick="showAdvice()">AI Advice</li>
 
-<select id="category">
+</ul>
 
-<option>Food</option>
-<option>Travel</option>
-<option>Shopping</option>
-<option>Education</option>
+</div>
 
-</select>
+<div class="content">
+
+<h1>Smart Expense Dashboard</h1>
+
+
+<div id="dashboard">
+
+<h2>Total Expense ₹ <span id="totalAmount">0</span></h2>
+
+</div>
+
+
+<div id="addExpense" class="page">
+
+<h2>Add Expense</h2>
+
+<form id="expenseForm" enctype="multipart/form-data">
+
+<input type="text" name="title" placeholder="Title" required>
+
+<input type="number" name="amount" placeholder="Amount" required>
+
+<input type="text" name="category" placeholder="Category">
+
+<input type="date" name="date">
+
+<input type="file" name="bill">
 
 <button type="submit">Add Expense</button>
 
 </form>
 
-<button id="darkBtn">🌙 Dark Mode</button>
+</div>
 
-<h2>Total: ₹ <span id="total">0</span></h2>
 
-<ul id="expenseList"></ul>
+<div id="history" class="page">
 
-<div class="charts">
+<h2>Expense History</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Title</th>
+<th>Amount</th>
+<th>Category</th>
+<th>Date</th>
+<th>Bill</th>
+<th>Delete</th>
+</tr>
+
+</thead>
+
+<tbody id="expenseTable"></tbody>
+
+</table>
+
+</div>
+
+
+<div id="charts" class="page">
+
+<h2>Expense Graph</h2>
+
+<canvas id="barChart"></canvas>
+
+<h2>Category Pie Chart</h2>
 
 <canvas id="pieChart"></canvas>
 
-<canvas id="barChart"></canvas>
+</div>
+
+
+<div id="vision" class="page">
+
+<h2>Live Vision</h2>
+
+<video id="video" width="400" autoplay></video>
+
+</div>
+
+
+<div id="advice" class="page">
+
+<h2>Expense Advice</h2>
+
+<p id="adviceText"></p>
+
+</div>
 
 </div>
 
@@ -54,4 +130,5 @@
 <script src="indexScript.js"></script>
 
 </body>
+
 </html>

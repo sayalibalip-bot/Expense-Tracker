@@ -1,116 +1,194 @@
 const form = document.getElementById("expenseForm");
-const list = document.getElementById("expenseList");
-const totalEl = document.getElementById("total");
 
-let expenses = [];
+function hidePages(){
 
-let pieChart;
-let barChart;
-
-form.addEventListener("submit",function(e){
-
-e.preventDefault();
-
-const title=document.getElementById("title").value;
-const amount=parseInt(document.getElementById("amount").value);
-const category=document.getElementById("category").value;
-
-const expense={
-id:Date.now(),
-title,
-amount,
-category
-};
-
-expenses.push(expense);
-
-render();
-
-form.reset();
-
-});
-
-function render(){
-
-list.innerHTML="";
-
-let total=0;
-
-expenses.forEach(e=>{
-
-total+=e.amount;
-
-const li=document.createElement("li");
-
-li.innerHTML=`
-${e.title} - ₹${e.amount}
-
-<button onclick="deleteExpense(${e.id})">Delete</button>
-`;
-
-list.appendChild(li);
-
-});
-
-totalEl.innerText=total;
-
-drawCharts();
+document.querySelectorAll(".page").forEach(p=>p.style.display="none")
 
 }
 
-function deleteExpense(id){
+function showDashboard(){
 
-expenses=expenses.filter(e=>e.id!==id);
-
-render();
+hidePages()
 
 }
 
-function drawCharts(){
+function showAdd(){
 
-const categories={};
+hidePages()
+document.getElementById("addExpense").style.display="block"
 
-expenses.forEach(e=>{
-categories[e.category]=(categories[e.category]||0)+e.amount;
-});
-
-const labels=Object.keys(categories);
-const values=Object.values(categories);
-
-if(pieChart) pieChart.destroy();
-
-pieChart=new Chart(document.getElementById("pieChart"),{
-
-type:"pie",
-
-data:{
-labels:labels,
-datasets:[{
-data:values
-}]
 }
 
-});
+function showHistory(){
 
-if(barChart) barChart.destroy();
+hidePages()
+document.getElementById("history").style.display="block"
+loadExpenses()
 
-barChart=new Chart(document.getElementById("barChart"),{
+}
+
+function showCharts(){
+
+hidePages()
+document.getElementById("charts").style.display="block"
+loadExpenses()
+
+}
+
+function showVision(){
+
+hidePages()
+document.getElementById("vision").style.display="block"
+
+navigator.mediaDevices.getUserMedia({video:true})
+
+.then(stream=>{
+
+document.getElementById("video").srcObject=stream
+
+})
+
+}
+
+function showAdvice(){
+
+hidePages()
+
+document.getElementById("advice").style.display="block"
+
+generateAdvice()
+
+}
+
+
+form.addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const formData = new FormData(form)
+
+await fetch("/add-expense",{
+
+method:"POST",
+body:formData
+
+})
+
+alert("Expense Added")
+
+form.reset()
+
+})
+
+
+async function loadExpenses(){
+
+const res = await fetch("/all-expenses")
+
+const data = await res.json()
+
+const table = document.getElementById("expenseTable")
+
+table.innerHTML=""
+
+let total=0
+
+let categoryData={}
+
+data.forEach(exp=>{
+
+total+=Number(exp.amount)
+
+if(!categoryData[exp.category]){
+
+categoryData[exp.category]=0
+
+}
+
+categoryData[exp.category]+=Number(exp.amount)
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${exp.title}</td>
+<td>${exp.amount}</td>
+<td>${exp.category}</td>
+<td>${exp.date}</td>
+<td>${exp.bill ? `<a href="/uploads/${exp.bill}" target="_blank">View</a>`:""}</td>
+<td><button onclick="deleteExpense('${exp._id}')">Delete</button></td>
+
+</tr>
+
+`
+
+})
+
+document.getElementById("totalAmount").innerText=total
+
+createCharts(data,categoryData)
+
+}
+
+
+function createCharts(data,categoryData){
+
+new Chart(document.getElementById("barChart"),{
 
 type:"bar",
 
 data:{
-labels:labels,
+
+labels:data.map(e=>e.title),
+
 datasets:[{
-data:values
+
+label:"Expenses",
+
+data:data.map(e=>e.amount)
+
 }]
-}
-
-});
 
 }
 
-document.getElementById("darkBtn").onclick=function(){
+})
 
-document.body.classList.toggle("dark");
+new Chart(document.getElementById("pieChart"),{
 
-};
+type:"pie",
+
+data:{
+
+labels:Object.keys(categoryData),
+
+datasets:[{
+
+data:Object.values(categoryData)
+
+}]
+
+}
+
+})
+
+}
+
+
+async function deleteExpense(id){
+
+await fetch("/delete-expense/"+id,{method:"DELETE"})
+
+loadExpenses()
+
+}
+
+
+function generateAdvice(){
+
+document.getElementById("adviceText").innerText=
+
+"Tip: Try to reduce unnecessary spending and track monthly budget."
+
+}
+
+loadExpenses()
